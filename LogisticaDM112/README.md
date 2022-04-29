@@ -11,7 +11,7 @@ A aplicação está, atualmente, rodando na porta 3000, o que pode ser modificad
 Um dump simples, criado em SQL, dialeto Postgres, pode ser utilizado para testar a aplicação. Também foram fornecidos scripts para a criação de pedidos, o que seria responsabilidade do módulo PedidosDM112.
 
 ## Arquitetura
-Pensado em repository design pattern, esta aplicação possui três camadas: um modelo, repository, que trata diretamente com o banco de dados, e serviços, que trata das regras de negócio.
+Pensado em repository design pattern, esta aplicação possui três camadas: um modelo, repository, que trata diretamente com o banco de dados, e serviços, que trata das regras de negócio. Javascript infelizmente não tem todas as cracterísticas que possibilitam uma ampla utilização dos conceitos de POO, mas estes foram utilizados ao máximo.
 
 ## Endpoints
 
@@ -21,7 +21,7 @@ Responsável por listar entregas. Traz uma lista de todas as entregas usualmente
 ## POST: /api/delivery/:order_id
 Responsável por criar uma nova entrega. Usualmente é acessado pelo próprio serviço de Pagamentos, uma vez que, assim que o pagamento é confirmado, o pedido vai para a entrega. O parâmetro escolhido é o id do pedido, que fica atrelado um a um com a entrega.
 
-Ao ser criado, a entrega não terá maior parte de seus valores.
+Ao ser criado, a entrega não terá maior parte de seus valores e começará em status 0, que diz apenas que ela foi gerada. Status 1 é a saída para entrega e status 2 é a entrega realizada.
 
 ## PATCH: /api/delivery/:id/?receiver_cpf=${}
 Responsável por atualizar o estado da entrega. Acessado uma vez, ele registrará o instante em que o processo de entrega começou. Acessado pela segunda vez, ele registrará a hora da entrega efetiva. Para tanto, é necessário que o parâmetro query receiver_cpf inclua o número de cpf do recebedor. Depois do processo, este endpoint ficará desabilitado.
@@ -31,9 +31,9 @@ Este endpoint também acessa o módulo Mensageiro, que envia um email para o cli
 
 ## Para rodar:
 
-1 - Instalar Node
-2 - Instalar um banco de dados de sua preferência
-3 - Intalar um cliente de sua preferência
-4 - Para instalar as dependências, rode `npm i`
-5 - Para rodar no modo de desenvolvimento em live reload `npm run dev`
-6 - Para rodar de maneira simples `node index.js`
+1) Instalar Node
+2) Instalar um banco de dados de sua preferência
+3) Intalar um cliente de sua preferência
+4) Para instalar as dependências, rode `npm i`
+5) Para rodar no modo de desenvolvimento em live reload `npm run dev`
+6) Para rodar de maneira simples `node index.js`
