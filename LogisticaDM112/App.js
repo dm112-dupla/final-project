@@ -9,10 +9,8 @@ module.exports = class App {
         app.use(express.json());
         app.use(routes);
 
-        app.get("/", (req, res) => res.send("Ok"))
-
         app.listen(port, () => {
-            console.log(`Server running at http://localhost:${port}/`)
+            console.log(`Server listening at http://localhost:${port}/`)
         })
     }
 }
