@@ -16,15 +16,14 @@ module.exports = class DeliveryService {
 
             const deli = new Delivery();
 
-            deli.order_id = order_id;
+            deli.setOrderId(order_id);
 
-            const create = await repo.create(deli);
+            const created = await repo.create(deli);
 
-
-            if (!create.length) {
+            if (!created.length) {
                 throw new Error("Unable to save data in databank. Try again later.")
             } else {
-                return res.status(200).json("Delivery saved")
+                return res.status(200).json(created)
             }
         } catch (error) {
             return res.status(400).json({ message: error.message })
@@ -92,25 +91,31 @@ module.exports = class DeliveryService {
                 throw new Error("Delivery not found.")
             }
 
-            const deli = search[0];
+            const deli = new Delivery();
+            deli.setId(search[0].id);
+            deli.setOrderId(search[0].order_id);
+            deli.setReceiverCpf(search[0].receiver_cpf);
+            deli.setStatus(search[0].status);
+            deli.setStartDate(search[0].start_date);
+            deli.setEndDate(search[0].end_date);
 
-            if (deli.receiver_cpf || deli.status === 2 || deli.enddate) {
+            if (deli.getReceiverCpf() || deli.getStatus() === 2 || deli.getEndDate()) {
                 throw new Error("Delivery already completed.")
             }
 
-            if (deli.status === 0) {
-                deli.status++;
-                deli.startdate = new Date();
+            if (deli.getStatus() === 0) {
+                deli.setStatus(1);
+                deli.setStartDate(new Date());
 
             } else if (deli.status === 1) {
-                deli.status++;
-                deli.enddate = new Date();
+                deli.setStatus(2);
+                deli.setEndDate(new Date());
 
                 if (!receiver_cpf) {
                     throw new Error("The receiver CPF must be informed.")
                 }
 
-                deli.receiver_cpf = receiver_cpf;
+                deli.setReceiverCpf(receiver_cpf);
             }
 
             const update = await repo.updateDelivery(deli);

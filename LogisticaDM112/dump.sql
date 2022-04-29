@@ -25,8 +25,8 @@ create table if not exists deliveries(
         status >= 0
         and status <= 2
     ),
-    startDate timestamp default null,
-    endDate timestamp default null,
+    start_date timestamp default null,
+    end_date timestamp default null,
     foreign key(order_id) references orders (id)
 );
 
