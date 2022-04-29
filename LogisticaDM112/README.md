@@ -34,7 +34,6 @@ Este endpoint também acessa o módulo Mensageiro, que envia um email para o cli
 1 - Instalar Node
 2 - Instalar um banco de dados de sua preferência
 3 - Intalar um cliente de sua preferência
-
-Para instalar as dependências, rode `npm i`
-Para rodar no modo de desenvolvimento em live reload `npm run dev`
-Para rodar de maneira simples `node index.js`
+4 - Para instalar as dependências, rode `npm i`
+5 - Para rodar no modo de desenvolvimento em live reload `npm run dev`
+6 - Para rodar de maneira simples `node index.js`
