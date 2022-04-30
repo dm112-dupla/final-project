@@ -50,7 +50,10 @@ module.exports = class OrderService {
 
     async patchOrder(req, res) {
         const { id } = req.params;
-        const { payment } = req.query;
+        const { token } = req.query;
+        // resolvemos simular o pagamento como um "token",
+        // que seria repassado pela instituição bancária com a confirmação do pagamento
+        // aqui ele pode ser tratado como uma simples query em true & false
 
         try {
             const repo = new OrderRepository();
@@ -81,9 +84,7 @@ module.exports = class OrderService {
                 order.setStatus(2);
                 order.setPaymentDate(new Date());
 
-                //trazer info do serviço de boleto
-
-                if (!receiver_cpf) {
+                if (!token) {
                     throw new Error("The receiver CPF must be informed.")
                 }
 
