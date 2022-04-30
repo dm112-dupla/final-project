@@ -16,6 +16,6 @@ module.exports = class EmailLib{
       }
     
       getPreview(email) {
-        nodemailer.getTestMessageUrl(email)
+        return nodemailer.getTestMessageUrl(email)
       }
 }

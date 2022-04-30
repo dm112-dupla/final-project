@@ -10,7 +10,7 @@ const routes = express();
 const baseUrl = "/api";
 
 routes.post(`${baseUrl}/email`, sendEmail);
-routes.get(`${baseUrl}/pix`, generatePix);
+routes.post(`${baseUrl}/pix`, generatePix);
 
 
 module.exports = routes;

@@ -20,7 +20,7 @@ module.exports = class PixService {
             })
 
         } catch (error) {
-            return res.status(400).json({ message: errror.message })
+            return res.status(400).json({ message: error.message })
         }
     }
 
