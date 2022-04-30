@@ -1,5 +1,7 @@
 const DeliveryRepository = require("../repositories/DeliveryRepository");
-const Delivery = require("../model/Delivery")
+const OrderClient = require("../client/OrderClient");
+const UtilityClient = require("../client/UtilityClient");
+const Delivery = require("../model/Delivery");
 
 module.exports = class DeliveryService {
     async postNewDelivery(req, res) {
@@ -116,6 +118,18 @@ module.exports = class DeliveryService {
                 }
 
                 deli.setReceiverCpf(receiver_cpf);
+
+                const oClient = new OrderClient();
+
+                const order = await oClient.getOrderInfo(deli.getOrderId());
+
+                const uClient = new UtilityClient();
+
+                const email = await uClient.sendEmail(`${order.data[0].cpf}@email.com`, 
+                "Your product is here!", 
+                `Your product was received by ${deli.getReceiverCpf()}`);
+
+                console.log(`See an email preview at ${email.data.preview}`);
             }
 
             const update = await repo.updateDelivery(deli);
