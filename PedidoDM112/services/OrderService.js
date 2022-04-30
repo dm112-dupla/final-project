@@ -1,6 +1,7 @@
 const Order = require("../model/Order");
 const OrderRepository = require("../repositories/OrderRepository");
-const UtilityClient = require("../client/UtilityClient")
+const UtilityClient = require("../client/UtilityClient");
+const DeliveryClient = require("../client/DeliveryClient");
 
 module.exports = class OrderService {
     async findOrder(req, res) {
@@ -74,7 +75,8 @@ module.exports = class OrderService {
             order.setIssueDate(search[0].issue_date);
             order.setPaymentDate(search[0].payment_date);
 
-            const client = new UtilityClient();
+            const uClient = new UtilityClient();
+            const dClient = new DeliveryClient();
 
             if (order.getStatus === 2) {
                 throw new Error("Your payment has already been confirmed. Await for your delivery!")
@@ -84,9 +86,9 @@ module.exports = class OrderService {
                 order.setStatus(1);
                 order.setIssueDate(new Date());
 
-                const pix = await client.generatePix(order.getValue(), `Order nº${order.getId()}`);
+                const pix = await uClient.generatePix(order.getValue(), `Order nº${order.getId()}`);
 
-                const email = await client.sendEmail(`${order.getCpf()}@email.com`,
+                const email = await uClient.sendEmail(`${order.getCpf()}@email.com`,
                     `Order nº${order.getId()}`,
                     `Your copy/paste PIX code is already available! ${pix.data.code}`);
 
@@ -100,9 +102,11 @@ module.exports = class OrderService {
                     throw new Error("Payment must be confirmed with a token.")
                 }
 
-                const email = await client.sendEmail(`${order.getCpf()}@email.com`,
+                const deli = await dClient.createDelivery(order.getId());
+
+                const email = await uClient.sendEmail(`${order.getCpf()}@email.com`,
                     `Order nº${order.getId()}`,
-                    "Payment confirmed! Thank you for your purchase!");
+                    `Payment confirmed! Thank you for your purchase! You may accompany your delivery by the ID nº ${deli.data[0].order_id}`);
 
                 console.log(`See an email preview at ${email.data.preview}`)
             }
